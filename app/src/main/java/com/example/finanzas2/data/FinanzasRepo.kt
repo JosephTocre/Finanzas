@@ -1,6 +1,5 @@
 package com.example.finanzas2.data
 
-// Repositorio en memoria (singleton)
 object FinanzasRepo {
     private val movimientos = mutableListOf<Movimiento>()
 

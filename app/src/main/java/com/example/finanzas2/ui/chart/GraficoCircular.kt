@@ -9,6 +9,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.data.Entry
+import androidx.core.graphics.toColorInt
 
 class GraficoCircular(
     private val pieChart: PieChart,
@@ -16,49 +17,55 @@ class GraficoCircular(
 ) {
 
     fun mostrarGrafico(ingresos: Double, gastos: Double) {
-        val total = ingresos + gastos
-        if (total == 0.0) return
+        val ingresosF = if (ingresos == 0.0) 0.01f else ingresos.toFloat()
+        val gastosF = if (gastos == 0.0) 0.01f else gastos.toFloat()
 
         val entries = listOf(
-            PieEntry(ingresos.toFloat(), "Ingresos"),
-            PieEntry(gastos.toFloat(), "Gastos")
+            PieEntry(ingresosF, "Ingresos"),
+            PieEntry(gastosF, "Gastos")
         )
 
-        val dataSet = PieDataSet(entries, "Resumen Financiero").apply {
-            colors = listOf(Color.parseColor("#4CAF50"), Color.parseColor("#F44336"))
-            valueTextSize = 14f
+        val dataSet = PieDataSet(entries, "").apply {
+            colors = listOf(
+                "#2ECC71".toColorInt(),
+                "#E74C3C".toColorInt()
+            )
+            valueTextSize = 12f
             valueTextColor = Color.WHITE
-            sliceSpace = 2f
+            sliceSpace = 3f
         }
 
         val data = PieData(dataSet).apply {
             setValueFormatter(PercentFormatter(pieChart))
-            setValueTextSize(14f)
-            setValueTextColor(Color.WHITE)
+            setValueTextSize(12f)
         }
 
         pieChart.apply {
             this.data = data
             setUsePercentValues(true)
             description.isEnabled = false
+
             isDrawHoleEnabled = true
-            holeRadius = 45f
-            transparentCircleRadius = 50f
-            setCenterText("Finanzas Totales")
+            holeRadius = 55f
+            transparentCircleRadius = 62f
+
+            setCenterText("Finanzas\nTotales")
             setCenterTextSize(16f)
-            setEntryLabelColor(Color.BLACK)
-            animateY(1000)
-            legend.isEnabled = true
+            setCenterTextColor(Color.DKGRAY)
+
+            setEntryLabelColor(Color.DKGRAY)
+            legend.isEnabled = false
+
+            animateY(1200)
             invalidate()
         }
 
         pieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
             override fun onValueSelected(e: Entry?, h: Highlight?) {
-                val entry = e as PieEntry
-                onSectorSeleccionado(entry.label)
+                onSectorSeleccionado((e as PieEntry).label)
             }
-
             override fun onNothingSelected() {}
         })
     }
+
 }
