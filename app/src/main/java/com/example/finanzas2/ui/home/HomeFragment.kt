@@ -25,7 +25,6 @@ class HomeFragment : Fragment() {
         binding.recyclerMovimientos.adapter = adapter
 
         actualizarSaldo()
-
         return binding.root
     }
 
@@ -37,7 +36,7 @@ class HomeFragment : Fragment() {
 
     private fun actualizarSaldo() {
         val saldo = FinanzasRepo.calcularSaldo()
-        binding.txtSaldo.text = "Saldo: $saldo"
+        binding.txtSaldo.text = "S/ %.2f".format(saldo)
     }
 
     override fun onDestroyView() {

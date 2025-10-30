@@ -17,12 +17,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Cargar fragment inicial
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment())
         }
 
-        // Configurar la barra de navegación inferior
+        // Configurar la barra de navegación
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_home -> replaceFragment(HomeFragment())
