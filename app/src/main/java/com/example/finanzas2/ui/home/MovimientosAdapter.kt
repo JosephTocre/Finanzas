@@ -34,8 +34,12 @@ class MovimientosAdapter(
         holder.binding.txtMonto.text =
             if (mov.esIngreso) "+$montoFormateado" else "-$montoFormateado"
 
-        holder.binding.txtFecha.text =
-            SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(mov.fecha)
+        val formatoSeguro = try {
+            SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
+        } catch (e: Exception) {
+            SimpleDateFormat("dd-MM-yyyy", Locale.US)
+        }
+        holder.binding.txtFecha.text = formatoSeguro.format(mov.fecha)
 
         val context = holder.itemView.context
         val color = if (mov.esIngreso)

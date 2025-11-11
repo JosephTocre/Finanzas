@@ -10,13 +10,18 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.data.Entry
 import androidx.core.graphics.toColorInt
+import java.lang.ref.WeakReference
 
 class GraficoCircular(
-    private val pieChart: PieChart,
-    private val onSectorSeleccionado: (String) -> Unit
+    pieChart: PieChart,
+    onSectorSeleccionado: (String) -> Unit
 ) {
+    private val pieChartRef = WeakReference(pieChart)
+    private val callbackRef = WeakReference(onSectorSeleccionado)
 
     fun mostrarGrafico(ingresos: Double, gastos: Double) {
+        val pieChart = pieChartRef.get() ?: return
+
         val ingresosF = if (ingresos == 0.0) 0.01f else ingresos.toFloat()
         val gastosF = if (gastos == 0.0) 0.01f else gastos.toFloat()
 
@@ -26,10 +31,7 @@ class GraficoCircular(
         )
 
         val dataSet = PieDataSet(entries, "").apply {
-            colors = listOf(
-                "#2ECC71".toColorInt(),
-                "#E74C3C".toColorInt()
-            )
+            colors = listOf("#2ECC71".toColorInt(), "#E74C3C".toColorInt())
             valueTextSize = 12f
             valueTextColor = Color.WHITE
             sliceSpace = 3f
@@ -60,12 +62,14 @@ class GraficoCircular(
             invalidate()
         }
 
+        // Listener seguro
         pieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
             override fun onValueSelected(e: Entry?, h: Highlight?) {
-                onSectorSeleccionado((e as PieEntry).label)
+                val label = (e as? PieEntry)?.label ?: return
+                callbackRef.get()?.invoke(label)
             }
+
             override fun onNothingSelected() {}
         })
     }
-
 }
