@@ -15,6 +15,9 @@ class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
 
+    // Runnable para limpiar el texto después de unos segundos
+    private var limpiarTextoRunnable: Runnable? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,15 +50,17 @@ class AddFragment : Fragment() {
             val movimiento = Movimiento(titulo, monto, esIngreso, Date())
             FinanzasRepo.agregarMovimiento(movimiento)
 
-            // Limpieza
+            // Limpieza visual
             binding.edtTitulo.text?.clear()
             binding.edtMonto.text?.clear()
             binding.radioIngreso.isChecked = true
             binding.txtConfirmacion.text = "Movimiento agregado exitosamente"
 
-            binding.txtConfirmacion.postDelayed({
-                binding.txtConfirmacion.text = ""
-            }, 3000)
+            // Runnable para limpiar el texto luego de 3 segundos
+            limpiarTextoRunnable = Runnable {
+                _binding?.txtConfirmacion?.text = ""
+            }
+            binding.txtConfirmacion.postDelayed(limpiarTextoRunnable!!, 3000)
 
             Snackbar.make(binding.root, "Movimiento registrado", Snackbar.LENGTH_SHORT).show()
         }
@@ -64,7 +69,12 @@ class AddFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        // Cancelar el postDelayed si aún está en cola
+        limpiarTextoRunnable?.let {
+            binding.txtConfirmacion.removeCallbacks(it)
+        }
+        limpiarTextoRunnable = null
         _binding = null
+        super.onDestroyView()
     }
 }
