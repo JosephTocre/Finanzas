@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -24,8 +25,23 @@
                 android:textSize="22sp"
                 android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="12dp"
-                android:layout_marginBottom="24dp"/>
+                android:layout_marginBottom="16dp"/>
 
+            <!-- RecyclerView de categorías -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerCategorias"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:orientation="horizontal"
+                android:clipToPadding="false"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:overScrollMode="always"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_categoria"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Nombre -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,6 +54,7 @@
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Monto -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,6 +69,7 @@
                     android:inputType="numberDecimal"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Tipo -->
             <TextView
                 android:text="Tipo"
                 android:textColor="@color/text_primary"
@@ -83,6 +101,7 @@
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
             </com.google.android.material.chip.ChipGroup>
 
+            <!-- Botón Guardar -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGuardar"
                 android:layout_width="match_parent"

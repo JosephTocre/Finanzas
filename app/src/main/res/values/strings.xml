@@ -5,4 +5,6 @@
     <string name="menu_chart">Resumen</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="categoria_icon">Icono de categoría</string>
+
 </resources>

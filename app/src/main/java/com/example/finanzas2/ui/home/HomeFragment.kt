@@ -30,7 +30,8 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        adapter.actualizar(FinanzasRepo.obtenerMovimientos())
+        // 🔹 Cambiado a actualizarLista()
+        adapter.actualizarLista(FinanzasRepo.obtenerMovimientos())
         actualizarSaldo()
     }
 

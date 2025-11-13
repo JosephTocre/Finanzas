@@ -11,10 +11,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MovimientosAdapter(
-    private var movimientos: List<Movimiento>
+    private var listaMovimientos: List<Movimiento>
 ) : RecyclerView.Adapter<MovimientosAdapter.MovimientoViewHolder>() {
 
-    class MovimientoViewHolder(val binding: ItemMovimientoBinding) :
+    inner class MovimientoViewHolder(val binding: ItemMovimientoBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovimientoViewHolder {
@@ -25,35 +25,37 @@ class MovimientosAdapter(
     }
 
     override fun onBindViewHolder(holder: MovimientoViewHolder, position: Int) {
-        val mov = movimientos[position]
-
-        holder.binding.txtTitulo.text = mov.titulo
-
-        val montoFormateado = "S/ %.2f".format(mov.monto)
-
-        holder.binding.txtMonto.text =
-            if (mov.esIngreso) "+$montoFormateado" else "-$montoFormateado"
-
-        val formatoSeguro = try {
-            SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
-        } catch (e: Exception) {
-            SimpleDateFormat("dd-MM-yyyy", Locale.US)
-        }
-        holder.binding.txtFecha.text = formatoSeguro.format(mov.fecha)
-
+        val mov = listaMovimientos[position]
         val context = holder.itemView.context
-        val color = if (mov.esIngreso)
-            ContextCompat.getColor(context, R.color.green_primary)
-        else
-            ContextCompat.getColor(context, R.color.red)
 
-        holder.binding.txtMonto.setTextColor(color)
+        with(holder.binding) {
+            // 🔹 Título
+            txtTitulo.text = mov.titulo
+
+            // 🔹 Categoría
+            txtCategoria.text = mov.categoria
+
+            // 🔹 Fecha formateada
+            val formato = SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
+            txtFecha.text = formato.format(mov.fecha)
+
+            // 🔹 Formato del monto con color y símbolo
+            val montoFormateado = "S/ %.2f".format(mov.monto)
+            if (mov.esIngreso) {
+                txtMonto.text = "+$montoFormateado"
+                txtMonto.setTextColor(ContextCompat.getColor(context, R.color.green_primary))
+            } else {
+                txtMonto.text = "-$montoFormateado"
+                txtMonto.setTextColor(ContextCompat.getColor(context, R.color.red))
+            }
+        }
     }
 
-    override fun getItemCount(): Int = movimientos.size
+    override fun getItemCount(): Int = listaMovimientos.size
 
-    fun actualizar(lista: List<Movimiento>) {
-        movimientos = lista
+    // 🔹 Método usado por HomeFragment
+    fun actualizarLista(nuevaLista: List<Movimiento>) {
+        listaMovimientos = nuevaLista
         notifyDataSetChanged()
     }
 }
