@@ -32,9 +32,7 @@ class ChartFragment : Fragment() {
         binding.recyclerDetalles.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerDetalles.adapter = adapter
 
-        // Gráfico circular con protección contra acceso a binding nulo
         GraficoCircular(binding.pieChart) { tipo ->
-            // Verifica que la vista aún exista antes de actualizar
             if (_binding != null && isAdded) {
                 val detalles = when (tipo) {
                     "Ingresos" -> FinanzasRepo.obtenerMovimientos().filter { it.esIngreso }

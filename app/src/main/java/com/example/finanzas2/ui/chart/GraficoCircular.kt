@@ -62,7 +62,6 @@ class GraficoCircular(
             invalidate()
         }
 
-        // Listener seguro
         pieChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
             override fun onValueSelected(e: Entry?, h: Highlight?) {
                 val label = (e as? PieEntry)?.label ?: return

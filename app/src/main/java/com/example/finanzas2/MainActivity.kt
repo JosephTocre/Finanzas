@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
             replaceFragment(HomeFragment())
         }
 
-        // Configurar la barra de navegación
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_home -> replaceFragment(HomeFragment())

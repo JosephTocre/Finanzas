@@ -22,7 +22,7 @@ class AddFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var categoriaSeleccionada: Categoria? = null
-    private var tipoSeleccionado: String? = null // "Ingreso" o "Gasto"
+    private var tipoSeleccionado: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +35,6 @@ class AddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Lista de categorías con sus iconos
         val listaCategorias = listOf(
             Categoria("Remuneración", R.drawable.ic_remuneracion),
             Categoria("Alimentación", R.drawable.ic_alimentacion),
@@ -51,7 +50,6 @@ class AddFragment : Fragment() {
             Categoria("Extras", R.drawable.ic_extras)
         )
 
-        // Configurar RecyclerView horizontal
         val adapter = CategoriasAdapter(listaCategorias) { categoria ->
             categoriaSeleccionada = categoria
         }
@@ -59,7 +57,6 @@ class AddFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerCategorias.adapter = adapter
 
-        // ChipGroup de tipo Ingreso/Gasto
         binding.radioGroupTipo.setOnCheckedChangeListener { _, checkedId ->
             tipoSeleccionado = when (checkedId) {
                 binding.radioIngreso.id -> "Ingreso"
@@ -68,12 +65,10 @@ class AddFragment : Fragment() {
             }
         }
 
-        // Botón Guardar
         binding.btnGuardar.setOnClickListener {
             val titulo = binding.edtTitulo.text.toString().trim()
             val montoText = binding.edtMonto.text.toString().trim()
 
-            // Validaciones
             if (titulo.isEmpty() || montoText.isEmpty() || categoriaSeleccionada == null || tipoSeleccionado == null) {
                 Snackbar.make(binding.root, "Completa todos los campos", Snackbar.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -85,7 +80,6 @@ class AddFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Crear movimiento
             val movimiento = Movimiento(
                 titulo = titulo,
                 monto = monto,
@@ -96,15 +90,12 @@ class AddFragment : Fragment() {
 
             FinanzasRepo.agregarMovimiento(movimiento)
 
-            // Confirmación
             binding.txtConfirmacion.text = "Movimiento registrado"
 
-            // 🕒 Ocultar el texto después de 0.5 segundos
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.txtConfirmacion.text = ""
             }, 500)
 
-            // Limpiar campos
             binding.edtTitulo.text?.clear()
             binding.edtMonto.text?.clear()
             binding.radioGroupTipo.clearCheck()

@@ -27,7 +27,6 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- RecyclerView de categorías -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerCategorias"
                 android:layout_width="match_parent"
@@ -41,7 +40,6 @@
                 tools:listitem="@layout/item_categoria"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Nombre -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +52,6 @@
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Monto -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,7 +66,6 @@
                     android:inputType="numberDecimal"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Tipo -->
             <TextView
                 android:text="Tipo"
                 android:textColor="@color/text_primary"
@@ -101,7 +97,6 @@
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
             </com.google.android.material.chip.ChipGroup>
 
-            <!-- Botón Guardar -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGuardar"
                 android:layout_width="match_parent"

@@ -29,14 +29,12 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Configurar RecyclerView
         adapter = MovimientosAdapter(FinanzasRepo.obtenerMovimientos())
         binding.recyclerMovimientos.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerMovimientos.adapter = adapter
 
         actualizarSaldo()
 
-        // Configurar Spinner
         val categorias = mutableListOf("Todas")
         categorias.addAll(FinanzasRepo.obtenerMovimientos()
             .map { it.categoria }
@@ -51,7 +49,6 @@ class HomeFragment : Fragment() {
         spinnerAdapter.setDropDownViewResource(com.example.finanzas2.R.layout.item_spinner_categoria)
         binding.spinnerFiltroCategoria.adapter = spinnerAdapter
 
-        // Listener del Spinner para filtrar
         binding.spinnerFiltroCategoria.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(

@@ -44,7 +44,6 @@ class MovimientosAdapter(private var listaMovimientos: List<Movimiento>) :
 
     override fun getItemCount(): Int = listaMovimientos.size
 
-    // ✅ Método para actualizar la lista de movimientos
     fun actualizar(nuevosMovimientos: List<Movimiento>) {
         listaMovimientos = nuevosMovimientos
         notifyDataSetChanged()
