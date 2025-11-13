@@ -26,12 +26,13 @@ class DetallesAdapter(private var detalles: List<Movimiento>) :
         val formato = NumberFormat.getCurrencyInstance(Locale("es", "PE"))
         val fechaFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
+        // Título
         holder.binding.txtTituloDetalle.text = detalle.titulo
+
+        // Monto con signo y color
         holder.binding.txtMontoDetalle.text =
             if (detalle.esIngreso) "+${formato.format(detalle.monto)}"
             else "-${formato.format(detalle.monto)}"
-
-        holder.binding.txtFechaDetalle.text = fechaFormat.format(detalle.fecha)
 
         val color = if (detalle.esIngreso) android.R.color.holo_green_dark
         else android.R.color.holo_red_dark
@@ -39,6 +40,12 @@ class DetallesAdapter(private var detalles: List<Movimiento>) :
         holder.binding.txtMontoDetalle.setTextColor(
             holder.itemView.context.getColor(color)
         )
+
+        // Fecha
+        holder.binding.txtFechaDetalle.text = fechaFormat.format(detalle.fecha)
+
+        // ✅ Categoría (la línea que faltaba)
+        holder.binding.txtCategoriaDetalle.text = "Categoría: ${detalle.categoria}"
     }
 
     override fun getItemCount(): Int = detalles.size

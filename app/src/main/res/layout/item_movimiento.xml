@@ -21,16 +21,26 @@
 
             <TextView
                 android:id="@+id/txtTitulo"
-                android:text="titulo"
+                android:text="Título"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="@color/text_primary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <!-- NUEVO: Categoría -->
+            <TextView
+                android:id="@+id/txtCategoria"
+                android:text="Categoría"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginTop="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
             <TextView
                 android:id="@+id/txtMonto"
-                android:text="monto"
+                android:text="Monto"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:layout_marginTop="4dp"
@@ -39,7 +49,7 @@
 
             <TextView
                 android:id="@+id/txtFecha"
-                android:text="fecha"
+                android:text="Fecha"
                 android:textSize="12sp"
                 android:textColor="@color/text_secondary"
                 android:layout_marginTop="2dp"
