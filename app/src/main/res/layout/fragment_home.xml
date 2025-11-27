@@ -25,54 +25,72 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txtTituloSaldo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:text="Saldo disponible"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp" />
+                    android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:id="@+id/layoutSaldo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
                         <TextView
-                            android:id="@+id/txtSaldo"
+                            android:id="@+id/txtTituloSaldo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-black"
+                            android:layout_marginBottom="8dp"
+                            android:fontFamily="sans-serif-medium"
                             android:gravity="center"
-                            android:text="S/ 0.00"
+                            android:text="Saldo disponible"
                             android:textColor="@android:color/white"
-                            android:textSize="32sp"
-                            android:textStyle="bold" />
+                            android:textSize="16sp" />
 
-                        <ImageView
-                            android:id="@+id/btnToggleSaldo"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_marginStart="8dp"
-                            android:src="@drawable/ic_eye"
-                            android:contentDescription="Mostrar/ocultar saldo"
-                            app:tint="@android:color/white" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/txtSaldo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-black"
+                                android:gravity="center"
+                                android:text="S/ 0.00"
+                                android:textColor="@android:color/white"
+                                android:textSize="32sp"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/btnToggleSaldo"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginStart="8dp"
+                                android:src="@drawable/ic_eye"
+                                android:contentDescription="Mostrar/ocultar saldo"
+                                app:tint="@android:color/white" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
 
+                    <ImageView
+                        android:id="@+id/ivEstadoSaldo"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_neutro"
+                        android:contentDescription="Estado del saldo"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_margin="8dp"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
-
-
             <TextView
                 android:id="@+id/txtTituloMov"
                 android:layout_width="wrap_content"

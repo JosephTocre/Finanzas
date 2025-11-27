@@ -107,7 +107,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun actualizarSaldo() {
-        binding.txtSaldo.text = if (saldoVisible) "S/ %.2f".format(calcularSaldo()) else "****"
+        val saldo = calcularSaldo()
+        binding.txtSaldo.text = if (saldoVisible) "S/ %.2f".format(saldo) else "****"
+
+        val saldoFeliz = 1500.0
+        val saldoNeutral = 1000.0
+
+        val (icono, color) = when {
+            saldo >= saldoFeliz -> R.drawable.ic_happy to android.graphics.Color.GREEN
+            saldo >= saldoNeutral -> R.drawable.ic_neutro to android.graphics.Color.YELLOW
+            else -> R.drawable.ic_bad to android.graphics.Color.RED
+        }
+
+        binding.ivEstadoSaldo.setImageResource(icono)
+        binding.ivEstadoSaldo.setColorFilter(color)
     }
 
     private fun mostrarDetalleMovimiento(movimiento: Movimiento) {
