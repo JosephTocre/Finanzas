@@ -58,6 +58,10 @@ class GraficoCircular(
             setEntryLabelColor(Color.DKGRAY)
             legend.isEnabled = false
 
+            isRotationEnabled = false
+            rotationAngle = 0f
+            isHighlightPerTapEnabled = true
+
             animateY(1200)
             invalidate()
         }

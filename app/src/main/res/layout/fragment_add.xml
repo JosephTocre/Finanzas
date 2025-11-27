@@ -69,6 +69,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:hint="Nota (opcional)"
                 android:layout_marginTop="16dp">
 
@@ -76,8 +77,11 @@
                     android:id="@+id/edtNota"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"/>
+                    android:inputType="textMultiLine"
+                    android:maxLines="2"
+                    android:minLines="1"/>
             </com.google.android.material.textfield.TextInputLayout>
+
 
 
             <TextView
