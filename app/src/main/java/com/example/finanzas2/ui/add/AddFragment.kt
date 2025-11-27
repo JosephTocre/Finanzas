@@ -40,13 +40,13 @@ class AddFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val listaCategorias = listOf(
-            Categoria("Remuneración", R.drawable.ic_remuneracion),
-            Categoria("Alimentación", R.drawable.ic_alimentacion),
+            Categoria("Aporte", R.drawable.ic_remuneracion),
+            Categoria("Alimento", R.drawable.ic_alimentacion),
             Categoria("Vivienda", R.drawable.ic_vivienda),
             Categoria("Transporte", R.drawable.ic_transporte),
             Categoria("Social", R.drawable.ic_social),
             Categoria("Regalos", R.drawable.ic_regalos),
-            Categoria("Comunicación", R.drawable.ic_comunicacion),
+            Categoria("Teléfono", R.drawable.ic_comunicacion),
             Categoria("Ropa", R.drawable.ic_ropa),
             Categoria("Recreación", R.drawable.ic_recreacion),
             Categoria("Salud", R.drawable.ic_salud),
