@@ -43,7 +43,6 @@ class MovimientosAdapter(
             txtMonto.setTextColor(holder.itemView.context.getColor(color))
         }
 
-        // Click para mostrar detalle con nota
         holder.itemView.setOnClickListener {
             onItemClick?.invoke(movimiento)
         }

@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import java.util.*
 
-// Definición de la tabla y columnas
 object MovimientoTable {
     const val TABLE = "movimientos"
     const val ID = "id"
@@ -27,7 +26,6 @@ fun Movimiento.toContentValues(): ContentValues {
     }
 }
 
-// DAO
 class MovimientoDao(context: Context) {
     private val dbHelper = DatabaseHelper(context)
 
@@ -54,7 +52,7 @@ class MovimientoDao(context: Context) {
                         esIngreso = cursor.getInt(cursor.getColumnIndexOrThrow(MovimientoTable.ES_INGRESO)) == 1,
                         fecha = Date(cursor.getLong(cursor.getColumnIndexOrThrow(MovimientoTable.FECHA))),
                         categoria = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.CATEGORIA)),
-                        note = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.NOTE)) // obtenemos la nota
+                        note = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.NOTE))
                     )
                 )
             } while (cursor.moveToNext())
@@ -85,8 +83,6 @@ class MovimientoDao(context: Context) {
         cursor.close()
         return movimiento
     }
-
-
 
 
     fun actualizarMovimiento(movimiento: Movimiento): Int {

@@ -92,9 +92,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
-
-
-
             <TextView
                 android:text="Tipo"
                 android:textColor="@color/text_primary"

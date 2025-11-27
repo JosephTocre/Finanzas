@@ -145,24 +145,19 @@ class HomeFragment : Fragment() {
         btnEditar.setOnClickListener {
             dialog.dismiss()
 
-            // Crear el bundle con el ID del movimiento
             val bundle = Bundle().apply {
                 putInt("movimientoId", movimiento.id ?: return@setOnClickListener)
             }
 
-            // Crear el fragmento AddFragment y pasar el bundle
             val addFragment = com.example.finanzas2.ui.add.AddFragment().apply {
                 arguments = bundle
             }
 
-            // Abrir el fragmento desde el FragmentManager
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, addFragment) // FrameLayout de activity_main
                 .addToBackStack(null)
                 .commit()
         }
-
-
 
 
         btnEliminar.setOnClickListener {
