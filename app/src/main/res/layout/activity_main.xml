@@ -12,7 +12,7 @@
         <View
             android:id="@+id/header_background"
             android:layout_width="0dp"
-            android:layout_height="180dp"
+            android:layout_height="120dp"
             android:background="@color/green_primary"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="40dp"
             android:text="Mis Finanzas"
             android:textColor="@android:color/white"
             android:textSize="24sp"
