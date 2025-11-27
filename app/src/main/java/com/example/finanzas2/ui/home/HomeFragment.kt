@@ -8,15 +8,17 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.finanzas2.data.FinanzasRepo
+import com.example.finanzas2.data.MovimientoDao
+import com.example.finanzas2.data.Movimiento
 import com.example.finanzas2.databinding.FragmentHomeBinding
-import com.example.finanzas2.ui.home.MovimientosAdapter
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: MovimientosAdapter
+    private lateinit var dao: MovimientoDao
+    private var movimientos: List<Movimiento> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,17 +31,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = MovimientosAdapter(FinanzasRepo.obtenerMovimientos())
+        dao = MovimientoDao(requireContext())
+        movimientos = dao.obtenerMovimientos()
+
+        adapter = MovimientosAdapter(movimientos)
         binding.recyclerMovimientos.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerMovimientos.adapter = adapter
 
         actualizarSaldo()
 
         val categorias = mutableListOf("Todas")
-        categorias.addAll(FinanzasRepo.obtenerMovimientos()
-            .map { it.categoria }
-            .distinct()
-            .sorted())
+        categorias.addAll(movimientos.map { it.categoria }.distinct().sorted())
 
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
@@ -58,13 +60,12 @@ class HomeFragment : Fragment() {
                 id: Long
             ) {
                 val seleccion = categorias[position]
-                if (seleccion == "Todas") {
-                    adapter.actualizar(FinanzasRepo.obtenerMovimientos())
+                movimientos = if (seleccion == "Todas") {
+                    dao.obtenerMovimientos()
                 } else {
-                    val filtrados = FinanzasRepo.obtenerMovimientos()
-                        .filter { it.categoria == seleccion }
-                    adapter.actualizar(filtrados)
+                    dao.obtenerMovimientos().filter { it.categoria == seleccion }
                 }
+                adapter.actualizar(movimientos)
                 actualizarSaldo()
             }
 
@@ -73,8 +74,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun actualizarSaldo() {
-        val totalIngresos = FinanzasRepo.obtenerMovimientos().filter { it.esIngreso }.sumOf { it.monto }
-        val totalGastos = FinanzasRepo.obtenerMovimientos().filter { !it.esIngreso }.sumOf { it.monto }
+        val totalIngresos = movimientos.filter { it.esIngreso }.sumOf { it.monto }
+        val totalGastos = movimientos.filter { !it.esIngreso }.sumOf { it.monto }
         val saldo = totalIngresos - totalGastos
         binding.txtSaldo.text = "S/ %.2f".format(saldo)
     }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Finanzas2</string>
+    <string name="app_name">Finanzas</string>
     <string name="menu_home">Inicio</string>
     <string name="menu_add">Agregar</string>
     <string name="menu_chart">Resumen</string>

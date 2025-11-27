@@ -10,16 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.finanzas2.R
 import com.example.finanzas2.data.Categoria
-import com.example.finanzas2.data.FinanzasRepo
 import com.example.finanzas2.data.Movimiento
+import com.example.finanzas2.data.MovimientoDao
 import com.example.finanzas2.databinding.FragmentAddBinding
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class AddFragment : Fragment() {
-
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
+    private lateinit var dao: MovimientoDao
 
     private var categoriaSeleccionada: Categoria? = null
     private var tipoSeleccionado: String? = null
@@ -29,6 +29,7 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
+        dao = MovimientoDao(requireContext())
         return binding.root
     }
 
@@ -88,7 +89,8 @@ class AddFragment : Fragment() {
                 categoria = categoriaSeleccionada!!.nombre
             )
 
-            FinanzasRepo.agregarMovimiento(movimiento)
+            // Guardar en SQLite
+            dao.insertarMovimiento(movimiento)
 
             binding.txtConfirmacion.text = "Movimiento registrado"
 
