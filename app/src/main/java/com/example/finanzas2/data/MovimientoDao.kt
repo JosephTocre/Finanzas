@@ -63,14 +63,39 @@ class MovimientoDao(context: Context) {
         cursor.close()
         return lista
     }
+    fun obtenerMovimientoPorId(id: Int): Movimiento? {
+        val db = dbHelper.readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT * FROM ${MovimientoTable.TABLE} WHERE ${MovimientoTable.ID}=?",
+            arrayOf(id.toString())
+        )
 
-    fun actualizarMovimiento(id: Int, movimiento: Movimiento): Int {
+        var movimiento: Movimiento? = null
+        if (cursor.moveToFirst()) {
+            movimiento = Movimiento(
+                id = cursor.getInt(cursor.getColumnIndexOrThrow(MovimientoTable.ID)),
+                titulo = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.TITULO)),
+                monto = cursor.getDouble(cursor.getColumnIndexOrThrow(MovimientoTable.MONTO)),
+                esIngreso = cursor.getInt(cursor.getColumnIndexOrThrow(MovimientoTable.ES_INGRESO)) == 1,
+                fecha = Date(cursor.getLong(cursor.getColumnIndexOrThrow(MovimientoTable.FECHA))),
+                categoria = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.CATEGORIA)),
+                note = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.NOTE))
+            )
+        }
+        cursor.close()
+        return movimiento
+    }
+
+
+
+
+    fun actualizarMovimiento(movimiento: Movimiento): Int {
         val db = dbHelper.writableDatabase
         return db.update(
             MovimientoTable.TABLE,
             movimiento.toContentValues(),
             "${MovimientoTable.ID}=?",
-            arrayOf(id.toString())
+            arrayOf(movimiento.id.toString())
         )
     }
 

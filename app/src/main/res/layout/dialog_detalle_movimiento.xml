@@ -1,45 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:background="@drawable/bg_categoria_normal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:background="@drawable/bg_categoria_normal">
 
-    <TextView
-        android:id="@+id/txtTituloDetalle"
-        android:text="Título"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <!-- Botones de editar y eliminar en la esquina superior derecha -->
+    <LinearLayout
+        android:id="@+id/accionesDetalle"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="8dp">
 
-    <TextView
-        android:id="@+id/txtMontoDetalle"
-        android:text="Monto"
-        android:textSize="16sp"
-        android:layout_marginTop="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <ImageButton
+            android:id="@+id/btnEditar"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_edit"
+            app:tint="@color/lila"
+            android:contentDescription="Editar" />
 
-    <TextView
-        android:id="@+id/txtCategoriaDetalle"
-        android:text="Categoría"
-        android:layout_marginTop="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <ImageButton
+            android:id="@+id/btnEliminar"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/lila"
+            android:contentDescription="Eliminar" />
 
-    <TextView
-        android:id="@+id/txtFechaDetalle"
-        android:text="Fecha"
-        android:layout_marginTop="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/txtNotaDetalle"
-        android:text="Nota"
-        android:layout_marginTop="4dp"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accionesDetalle"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/txtTituloDetalle"
+            android:text="Título"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtMontoDetalle"
+            android:text="Monto"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtCategoriaDetalle"
+            android:text="Categoría"
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtFechaDetalle"
+            android:text="Fecha"
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/txtNotaDetalle"
+            android:text="Nota"
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>

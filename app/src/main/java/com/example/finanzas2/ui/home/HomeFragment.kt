@@ -1,3 +1,4 @@
+// HomeFragment.kt
 package com.example.finanzas2.ui.home
 
 import android.os.Bundle
@@ -6,15 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.finanzas2.R
 import com.example.finanzas2.data.Movimiento
 import com.example.finanzas2.data.MovimientoDao
 import com.example.finanzas2.databinding.FragmentHomeBinding
 import java.text.SimpleDateFormat
-import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 class HomeFragment : Fragment() {
@@ -81,30 +84,18 @@ class HomeFragment : Fragment() {
     private fun configurarSpinner() {
         val categorias = mutableListOf("Todas")
         categorias.addAll(movimientos.map { it.categoria }.distinct().sorted())
-
-        val spinnerAdapter = ArrayAdapter(
-            requireContext(),
-            R.layout.item_spinner_categoria,
-            categorias
-        )
+        val spinnerAdapter = ArrayAdapter(requireContext(), R.layout.item_spinner_categoria, categorias)
         spinnerAdapter.setDropDownViewResource(R.layout.item_spinner_categoria)
         binding.spinnerFiltroCategoria.adapter = spinnerAdapter
 
-        binding.spinnerFiltroCategoria.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
+        binding.spinnerFiltroCategoria.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val seleccion = categorias[position]
-                movimientos = if (seleccion == "Todas") {
-                    dao.obtenerMovimientos()
-                } else {
-                    dao.obtenerMovimientos().filter { it.categoria == seleccion }
-                }
+                movimientos = if (seleccion == "Todas") dao.obtenerMovimientos()
+                else dao.obtenerMovimientos().filter { it.categoria == seleccion }
                 adapter.actualizar(movimientos)
                 actualizarSaldo()
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
@@ -116,8 +107,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun actualizarSaldo() {
-        binding.txtSaldo.text =
-            if (saldoVisible) "S/ %.2f".format(calcularSaldo()) else "****"
+        binding.txtSaldo.text = if (saldoVisible) "S/ %.2f".format(calcularSaldo()) else "****"
     }
 
     private fun mostrarDetalleMovimiento(movimiento: Movimiento) {
@@ -127,22 +117,54 @@ class HomeFragment : Fragment() {
         view.findViewById<TextView>(R.id.txtTituloDetalle).text = movimiento.titulo
         view.findViewById<TextView>(R.id.txtMontoDetalle).text =
             if (movimiento.esIngreso) "+S/ ${movimiento.monto}" else "-S/ ${movimiento.monto}"
-        view.findViewById<TextView>(R.id.txtCategoriaDetalle).text =
-            "Categoría: ${movimiento.categoria}"
-        view.findViewById<TextView>(R.id.txtFechaDetalle).text =
-            "Fecha: ${fechaFormat.format(movimiento.fecha)}"
-        view.findViewById<TextView>(R.id.txtNotaDetalle).text =
-            "Nota: ${movimiento.note ?: "Sin nota"}"
+        view.findViewById<TextView>(R.id.txtCategoriaDetalle).text = "Categoría: ${movimiento.categoria}"
+        view.findViewById<TextView>(R.id.txtFechaDetalle).text = "Fecha: ${fechaFormat.format(movimiento.fecha)}"
+        view.findViewById<TextView>(R.id.txtNotaDetalle).text = "Nota: ${movimiento.note ?: "Sin nota"}"
 
-        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+        val btnEditar = view.findViewById<ImageButton>(R.id.btnEditar)
+        val btnEliminar = view.findViewById<ImageButton>(R.id.btnEliminar)
+
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
             .setView(view)
             .setPositiveButton("Cerrar", null)
-            .show()
+            .create()
+
+        btnEditar.setOnClickListener {
+            dialog.dismiss()
+
+            // Crear el bundle con el ID del movimiento
+            val bundle = Bundle().apply {
+                putInt("movimientoId", movimiento.id ?: return@setOnClickListener)
+            }
+
+            // Crear el fragmento AddFragment y pasar el bundle
+            val addFragment = com.example.finanzas2.ui.add.AddFragment().apply {
+                arguments = bundle
+            }
+
+            // Abrir el fragmento desde el FragmentManager
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, addFragment) // FrameLayout de activity_main
+                .addToBackStack(null)
+                .commit()
+        }
+
+
+
+
+        btnEliminar.setOnClickListener {
+            dialog.dismiss()
+            dao.eliminarMovimiento(movimiento.id ?: return@setOnClickListener)
+            movimientos = dao.obtenerMovimientos()
+            adapter.actualizar(movimientos)
+            actualizarSaldo()
+        }
+
+        dialog.show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 }

@@ -10,6 +10,7 @@
     <color name="text_primary">#323232</color>
     <color name="text_secondary">#6E6E6E</color>
     <color name="gray_light">#858383</color>
+    <color name="lila">#A384DB</color>
 
 
 </resources>

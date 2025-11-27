@@ -17,12 +17,14 @@ import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class AddFragment : Fragment() {
+
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
     private lateinit var dao: MovimientoDao
 
     private var categoriaSeleccionada: Categoria? = null
     private var tipoSeleccionado: String? = null
+    private var movimientoId: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +32,7 @@ class AddFragment : Fragment() {
     ): View {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         dao = MovimientoDao(requireContext())
+        movimientoId = arguments?.getInt("movimientoId")
         return binding.root
     }
 
@@ -66,6 +69,28 @@ class AddFragment : Fragment() {
             }
         }
 
+        movimientoId = arguments?.getInt("movimientoId")
+
+        movimientoId?.let { id ->
+            val movimiento = dao.obtenerMovimientoPorId(id)
+            if (movimiento != null) {
+                binding.edtTitulo.setText(movimiento.titulo)
+                binding.edtMonto.setText(movimiento.monto.toString())
+                binding.edtNota.setText(movimiento.note ?: "")
+
+                categoriaSeleccionada = Categoria(movimiento.categoria, 0)
+                adapter.notifyDataSetChanged()
+
+                tipoSeleccionado = if (movimiento.esIngreso) "Ingreso" else "Gasto"
+                if (movimiento.esIngreso) binding.radioIngreso.isChecked = true
+                else binding.radioGasto.isChecked = true
+            } else {
+                Snackbar.make(binding.root, "Movimiento no encontrado", Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+
+
         binding.btnGuardar.setOnClickListener {
             val titulo = binding.edtTitulo.text.toString().trim()
             val montoText = binding.edtMonto.text.toString().trim()
@@ -83,6 +108,7 @@ class AddFragment : Fragment() {
             }
 
             val movimiento = Movimiento(
+                id = movimientoId,
                 titulo = titulo,
                 monto = monto,
                 esIngreso = tipoSeleccionado == "Ingreso",
@@ -91,9 +117,13 @@ class AddFragment : Fragment() {
                 note = if (nota.isEmpty()) null else nota
             )
 
-            dao.insertarMovimiento(movimiento)
-
-            binding.txtConfirmacion.text = "Movimiento registrado"
+            if (movimientoId != null) {
+                dao.actualizarMovimiento(movimiento)
+                Snackbar.make(binding.root, "Movimiento actualizado", Snackbar.LENGTH_SHORT).show()
+            } else {
+                dao.insertarMovimiento(movimiento)
+                Snackbar.make(binding.root, "Movimiento registrado", Snackbar.LENGTH_SHORT).show()
+            }
 
             Handler(Looper.getMainLooper()).postDelayed({
                 binding.txtConfirmacion.text = ""
@@ -112,4 +142,5 @@ class AddFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }
