@@ -9,8 +9,10 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MovimientosAdapter(private var listaMovimientos: List<Movimiento>) :
-    RecyclerView.Adapter<MovimientosAdapter.MovimientoViewHolder>() {
+class MovimientosAdapter(
+    private var listaMovimientos: List<Movimiento>,
+    private val onItemClick: ((Movimiento) -> Unit)? = null
+) : RecyclerView.Adapter<MovimientosAdapter.MovimientoViewHolder>() {
 
     class MovimientoViewHolder(val binding: ItemMovimientoBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -39,6 +41,11 @@ class MovimientosAdapter(private var listaMovimientos: List<Movimiento>) :
                 android.R.color.holo_red_dark
 
             txtMonto.setTextColor(holder.itemView.context.getColor(color))
+        }
+
+        // Click para mostrar detalle con nota
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(movimiento)
         }
     }
 

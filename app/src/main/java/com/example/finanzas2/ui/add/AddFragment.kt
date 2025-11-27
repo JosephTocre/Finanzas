@@ -69,6 +69,7 @@ class AddFragment : Fragment() {
         binding.btnGuardar.setOnClickListener {
             val titulo = binding.edtTitulo.text.toString().trim()
             val montoText = binding.edtMonto.text.toString().trim()
+            val nota = binding.edtNota.text.toString().trim()
 
             if (titulo.isEmpty() || montoText.isEmpty() || categoriaSeleccionada == null || tipoSeleccionado == null) {
                 Snackbar.make(binding.root, "Completa todos los campos", Snackbar.LENGTH_SHORT).show()
@@ -86,10 +87,10 @@ class AddFragment : Fragment() {
                 monto = monto,
                 esIngreso = tipoSeleccionado == "Ingreso",
                 fecha = Date(),
-                categoria = categoriaSeleccionada!!.nombre
+                categoria = categoriaSeleccionada!!.nombre,
+                note = if (nota.isEmpty()) null else nota
             )
 
-            // Guardar en SQLite
             dao.insertarMovimiento(movimiento)
 
             binding.txtConfirmacion.text = "Movimiento registrado"
@@ -100,6 +101,7 @@ class AddFragment : Fragment() {
 
             binding.edtTitulo.text?.clear()
             binding.edtMonto.text?.clear()
+            binding.edtNota.text?.clear()
             binding.radioGroupTipo.clearCheck()
             categoriaSeleccionada = null
             adapter.notifyDataSetChanged()

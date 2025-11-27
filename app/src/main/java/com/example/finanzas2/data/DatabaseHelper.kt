@@ -10,17 +10,19 @@ class DatabaseHelper(context: Context) :
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
-            CREATE TABLE movimientos (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                titulo TEXT NOT NULL,
-                monto REAL NOT NULL,
-                esIngreso INTEGER NOT NULL,
-                fecha INTEGER NOT NULL,
-                categoria TEXT NOT NULL
-            )
-            """
+        CREATE TABLE movimientos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            titulo TEXT NOT NULL,
+            monto REAL NOT NULL,
+            esIngreso INTEGER NOT NULL,
+            fecha INTEGER NOT NULL,
+            categoria TEXT NOT NULL,
+            note TEXT
+        )
+        """
         )
     }
+
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS movimientos")

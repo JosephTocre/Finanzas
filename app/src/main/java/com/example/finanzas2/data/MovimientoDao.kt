@@ -2,7 +2,9 @@ package com.example.finanzas2.data
 
 import android.content.ContentValues
 import android.content.Context
+import java.util.*
 
+// Definición de la tabla y columnas
 object MovimientoTable {
     const val TABLE = "movimientos"
     const val ID = "id"
@@ -11,6 +13,7 @@ object MovimientoTable {
     const val ES_INGRESO = "esIngreso"
     const val FECHA = "fecha"
     const val CATEGORIA = "categoria"
+    const val NOTE = "note"
 }
 
 fun Movimiento.toContentValues(): ContentValues {
@@ -20,11 +23,12 @@ fun Movimiento.toContentValues(): ContentValues {
         put(MovimientoTable.ES_INGRESO, if (esIngreso) 1 else 0)
         put(MovimientoTable.FECHA, fecha.time)
         put(MovimientoTable.CATEGORIA, categoria)
+        put(MovimientoTable.NOTE, note)
     }
 }
 
+// DAO
 class MovimientoDao(context: Context) {
-
     private val dbHelper = DatabaseHelper(context)
 
     fun insertarMovimiento(mov: Movimiento): Long {
@@ -48,8 +52,9 @@ class MovimientoDao(context: Context) {
                         titulo = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.TITULO)),
                         monto = cursor.getDouble(cursor.getColumnIndexOrThrow(MovimientoTable.MONTO)),
                         esIngreso = cursor.getInt(cursor.getColumnIndexOrThrow(MovimientoTable.ES_INGRESO)) == 1,
-                        fecha = java.util.Date(cursor.getLong(cursor.getColumnIndexOrThrow(MovimientoTable.FECHA))),
-                        categoria = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.CATEGORIA))
+                        fecha = Date(cursor.getLong(cursor.getColumnIndexOrThrow(MovimientoTable.FECHA))),
+                        categoria = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.CATEGORIA)),
+                        note = cursor.getString(cursor.getColumnIndexOrThrow(MovimientoTable.NOTE)) // obtenemos la nota
                     )
                 )
             } while (cursor.moveToNext())
@@ -77,5 +82,4 @@ class MovimientoDao(context: Context) {
             arrayOf(id.toString())
         )
     }
-
 }

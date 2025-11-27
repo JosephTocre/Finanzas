@@ -8,5 +8,6 @@ data class Movimiento(
     val monto: Double,
     val esIngreso: Boolean,
     val fecha: Date,
-    val categoria: String
+    val categoria: String,
+    val note: String? = null
 )
