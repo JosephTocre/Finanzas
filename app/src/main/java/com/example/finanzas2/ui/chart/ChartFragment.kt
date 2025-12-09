@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.finanzas2.data.MovimientoDao
 import com.example.finanzas2.data.Movimiento
+import com.example.finanzas2.data.PdfMovimientosGenerator
 import com.example.finanzas2.databinding.FragmentChartBinding
 import java.text.NumberFormat
 import java.util.*
@@ -51,6 +52,11 @@ class ChartFragment : Fragment() {
                 adapter.actualizar(detalles)
             }
         }.mostrarGrafico(ingresos, gastos)
+
+        binding.btnExportarPdf.setOnClickListener {
+            val pdfGenerator = PdfMovimientosGenerator(requireContext())
+            pdfGenerator.generarYCompartirPdf(movimientos)
+        }
 
         return binding.root
     }
