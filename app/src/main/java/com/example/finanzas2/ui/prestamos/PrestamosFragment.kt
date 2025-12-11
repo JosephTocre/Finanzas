@@ -1,12 +1,19 @@
 package com.example.finanzas2.ui.prestamos
 
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.finanzas2.databinding.FragmentPrestamosBinding
+import java.io.File
+import java.io.FileOutputStream
 import kotlin.math.pow
 
 class PrestamosFragment : Fragment() {
@@ -35,6 +42,10 @@ class PrestamosFragment : Fragment() {
 
         binding.btnCalcularPrestamo.setOnClickListener {
             calcularPrestamo()
+        }
+
+        binding.btnGuardarImagen.setOnClickListener {
+            guardarCronogramaComoImagen()
         }
     }
 
@@ -92,6 +103,69 @@ class PrestamosFragment : Fragment() {
         }
 
         adapter.notifyDataSetChanged()
+    }
+    private fun guardarCronogramaComoImagen() {
+        val adapter = binding.recyclerCuotas.adapter ?: return
+        val itemCount = adapter.itemCount
+
+        if (itemCount == 0) {
+            Toast.makeText(requireContext(), "No hay datos para exportar", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val viewWidth = binding.recyclerCuotas.width
+        var totalHeight = 0
+
+        val paint = Paint()
+        val itemBitmaps = mutableListOf<Bitmap>()
+
+        for (i in 0 until itemCount) {
+            val holder = adapter.createViewHolder(binding.recyclerCuotas, adapter.getItemViewType(i))
+            adapter.onBindViewHolder(holder, i)
+
+            holder.itemView.measure(
+                View.MeasureSpec.makeMeasureSpec(viewWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            )
+            holder.itemView.layout(0, 0, viewWidth, holder.itemView.measuredHeight)
+
+            val bitmap = Bitmap.createBitmap(
+                viewWidth,
+                holder.itemView.measuredHeight,
+                Bitmap.Config.ARGB_8888
+            )
+
+            val canvas = Canvas(bitmap)
+            holder.itemView.draw(canvas)
+
+            totalHeight += holder.itemView.measuredHeight
+            itemBitmaps.add(bitmap)
+        }
+
+        val finalBitmap = Bitmap.createBitmap(viewWidth, totalHeight, Bitmap.Config.ARGB_8888)
+        val finalCanvas = Canvas(finalBitmap)
+
+        var yOffset = 0
+        for (bmp in itemBitmaps) {
+            finalCanvas.drawBitmap(bmp, 0f, yOffset.toFloat(), paint)
+            yOffset += bmp.height
+            bmp.recycle()
+        }
+
+        val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(path, "CronogramaPrestamo.png")
+
+        try {
+            val output = FileOutputStream(file)
+            finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+            output.flush()
+            output.close()
+
+            Toast.makeText(requireContext(), "Imagen guardada en Descargas", Toast.LENGTH_LONG).show()
+
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Error al guardar: ${e.message}", Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onDestroyView() {

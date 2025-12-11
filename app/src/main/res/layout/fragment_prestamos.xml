@@ -19,7 +19,7 @@
                 android:id="@+id/txtTituloPrestamo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Realiza tu préstamo"
+                android:text="Simula tu préstamo"
                 android:textColor="@color/text_primary"
                 android:textStyle="bold"
                 android:textSize="22sp"
@@ -84,6 +84,16 @@
                     app:cornerRadius="16dp"
                     app:backgroundTint="@color/green_primary"
                     android:textColor="@android:color/white"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGuardarImagen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Guardar cuotas"
+                    android:layout_marginTop="12dp"
+                    app:cornerRadius="16dp"
+                    app:backgroundTint="@color/green_primary"
+                    android:textColor="@android:color/white"/>
+
             </LinearLayout>
 
             <LinearLayout
