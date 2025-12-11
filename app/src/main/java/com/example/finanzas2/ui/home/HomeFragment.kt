@@ -154,7 +154,7 @@ class HomeFragment : Fragment() {
             }
 
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, addFragment) // FrameLayout de activity_main
+                .replace(R.id.fragment_container, addFragment)
                 .addToBackStack(null)
                 .commit()
         }
