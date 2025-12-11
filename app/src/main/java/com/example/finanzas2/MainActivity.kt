@@ -9,6 +9,7 @@ import com.example.finanzas2.databinding.ActivityMainBinding
 import com.example.finanzas2.ui.add.AddFragment
 import com.example.finanzas2.ui.chart.ChartFragment
 import com.example.finanzas2.ui.home.HomeFragment
+import com.example.finanzas2.ui.prestamos.PrestamosFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -40,12 +41,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_home -> replaceFragment(HomeFragment())
                 R.id.menu_add -> replaceFragment(AddFragment())
                 R.id.menu_chart -> replaceFragment(ChartFragment())
+                R.id.menu_prestamos -> replaceFragment(PrestamosFragment())
             }
             true
         }
     }
-
-
+    
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
