@@ -1,10 +1,11 @@
 package com.example.finanzas2.ui.prestamos
 
+import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Bundle
-import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.finanzas2.databinding.FragmentPrestamosBinding
-import java.io.File
-import java.io.FileOutputStream
 import kotlin.math.pow
 
 class PrestamosFragment : Fragment() {
@@ -48,7 +47,6 @@ class PrestamosFragment : Fragment() {
             guardarCronogramaComoImagen()
         }
     }
-
     private fun calcularPrestamo() {
         val monto = binding.edtMontoPrestamo.text.toString().toDoubleOrNull()
         val tasa = binding.edtInteres.text.toString().toDoubleOrNull()
@@ -73,23 +71,19 @@ class PrestamosFragment : Fragment() {
         binding.layoutResultados.visibility = View.VISIBLE
         binding.txtCuotasTitulo.visibility = View.VISIBLE
         binding.recyclerCuotas.visibility = View.VISIBLE
-
         binding.txtTotalPagar.text = "Total a pagar: S/ ${"%.2f".format(totalPagar)}"
         binding.txtPagoMensual.text = "Pago mensual: S/ ${"%.2f".format(cuota)}"
 
         generarCuotas(monto, tasaDecimal, meses, cuota)
     }
-
     private fun generarCuotas(monto: Double, tasaMensual: Double, meses: Int, cuota: Double) {
         cuotasList.clear()
         var saldo = monto
 
         for (i in 1..meses) {
-
             val interesMes = saldo * tasaMensual
             val amortizacion = cuota - interesMes
             saldo -= amortizacion
-
             if (saldo < 0) saldo = 0.0
 
             cuotasList.add(
@@ -101,7 +95,6 @@ class PrestamosFragment : Fragment() {
                 )
             )
         }
-
         adapter.notifyDataSetChanged()
     }
     private fun guardarCronogramaComoImagen() {
@@ -115,7 +108,6 @@ class PrestamosFragment : Fragment() {
 
         val viewWidth = binding.recyclerCuotas.width
         var totalHeight = 0
-
         val paint = Paint()
         val itemBitmaps = mutableListOf<Bitmap>()
 
@@ -128,20 +120,17 @@ class PrestamosFragment : Fragment() {
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
             )
             holder.itemView.layout(0, 0, viewWidth, holder.itemView.measuredHeight)
-
             val bitmap = Bitmap.createBitmap(
                 viewWidth,
                 holder.itemView.measuredHeight,
                 Bitmap.Config.ARGB_8888
             )
-
             val canvas = Canvas(bitmap)
             holder.itemView.draw(canvas)
 
             totalHeight += holder.itemView.measuredHeight
             itemBitmaps.add(bitmap)
         }
-
         val finalBitmap = Bitmap.createBitmap(viewWidth, totalHeight, Bitmap.Config.ARGB_8888)
         val finalCanvas = Canvas(finalBitmap)
 
@@ -151,23 +140,40 @@ class PrestamosFragment : Fragment() {
             yOffset += bmp.height
             bmp.recycle()
         }
-
-        val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(path, "CronogramaPrestamo.png")
-
-        try {
-            val output = FileOutputStream(file)
-            finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
-            output.flush()
-            output.close()
-
-            Toast.makeText(requireContext(), "Imagen guardada en Descargas", Toast.LENGTH_LONG).show()
-
-        } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Error al guardar: ${e.message}", Toast.LENGTH_LONG).show()
-        }
+        guardarEnGaleria(finalBitmap)
     }
+    private fun guardarEnGaleria(bitmap: Bitmap) {
+        val nombreArchivo = "CronogramaPrestamo_${System.currentTimeMillis()}.png"
 
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, nombreArchivo)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/FinanzasApp")
+            put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+        val resolver = requireContext().contentResolver
+        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        if (uri != null) {
+            try {
+                resolver.openOutputStream(uri)?.use { output ->
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+                } ?: run {
+                    Toast.makeText(requireContext(), "No se pudo abrir el archivo para guardar", Toast.LENGTH_LONG).show()
+                    return
+                }
+                contentValues.clear()
+                contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+                resolver.update(uri, contentValues, null, null)
+
+                Toast.makeText(requireContext(), "Imagen guardada en la galería", Toast.LENGTH_LONG).show()
+
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error al guardar: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
